@@ -1,12 +1,15 @@
-import { Basic, Combined, Animated, bounce } from '../shared/styles'
-const Home = () => (
-  <div>
-    <Basic>Cool Styles</Basic>
-    <Combined>
-      With <code>:hover</code>.
-    </Combined>
-    <Animated animation={bounce}>Let's bounce.</Animated>
-  </div>
-)
+import 'twin.macro';
+import React from 'react';
+import { LoginWithGithubButton } from '../components/login-with-github-button';
+import { Header } from '../components/header';
 
-export default Home
+const Home = ({}) => (
+  <section>
+    <Header />
+    <p tw="mx-auto" css={{ width: 'max-content' }}>
+      <LoginWithGithubButton />
+    </p>
+  </section>
+);
+
+export default Home;
