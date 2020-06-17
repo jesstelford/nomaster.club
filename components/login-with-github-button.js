@@ -7,7 +7,7 @@ export const LoginWithGithubButton = (props) => (
     href={`https://github.com/login/oauth/authorize?client_id=${
       process.env.NEXT_PUBLIC_GITHUB_APP_CLIENT_ID
     }&scope=repo&redirect_uri=${encodeURIComponent(
-      'http://localhost:3000/github/login'
+      `${process.env.NEXT_PUBLIC_DOMAIN}/github/login`
     )}`}
     {...props}
   >
