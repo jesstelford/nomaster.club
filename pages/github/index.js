@@ -2,11 +2,12 @@ import 'twin.macro';
 import React, { Fragment, useEffect, useState } from 'react';
 import useSWR, { useSWRPages } from 'swr';
 import { GraphQLClient } from 'graphql-request';
-import { RepoList } from '../../components/repo-list';
-import { RepoPage } from '../../components/repo-page';
+import { CheckemProvider } from 'react-checkem';
+import { RepoList, RepoPage } from '../../components/repo-list';
 import { HollowButton } from '../../components/button';
 import { Header } from '../../components/header';
 import { LoginWithGithubButton } from '../../components/login-with-github-button';
+import { Stack } from '../../components/layout';
 
 const GITHUB_GRAPHQL_API = 'https://api.github.com/graphql';
 
@@ -23,10 +24,10 @@ const useToken = () => {
 };
 
 const GitHubPage = () => (
-  <section>
-    <Header />
+  <Stack as="section" gap="xlarge" tw="pb-24">
+    <Header tw="mt-16" />
     <GitHub />
-  </section>
+  </Stack>
 );
 
 const GitHub = ({}) => {
@@ -40,7 +41,11 @@ const GitHub = ({}) => {
     return <LoginWithGithubButton />;
   }
 
-  return <Repos token={token} />;
+  return (
+    <CheckemProvider name="repo-select">
+      <Repos token={token} />
+    </CheckemProvider>
+  );
 };
 
 const Repos = ({ token }) => {
@@ -53,7 +58,7 @@ const Repos = ({ token }) => {
   } = useSWRPages(
     'project-page', // key of this page
     // ======== the actual Page component!
-    ({ offset, withSWR }) => {
+    ({ offset, withSWR, setSelected }) => {
       // required: use `withSWR` to wrap your main SWR (source of your pagination API)
       const { data } = withSWR(
         useSWR(
@@ -82,6 +87,10 @@ const Repos = ({ token }) => {
                     url
                     defaultBranchRef {
                       name
+                      target {
+                        oid
+                        abbreviatedOid
+                      }
                     }
                   }
                 }
@@ -119,16 +128,20 @@ const Repos = ({ token }) => {
   if (isEmpty) return 'No repos';
 
   return (
-    <div tw="pb-24">
-      <RepoList pages={pages} tw="pb-24" />
-      {isReachingEnd ? null : (
-        <p tw="mx-auto" css={{ width: 'max-content' }}>
-          <HollowButton loading={isLoadingMore} onClick={loadMore}>
-            Load More
-          </HollowButton>
-        </p>
-      )}
-    </div>
+    <Fragment>
+      <RepoList tw="pb-24">
+        {pages.map((Page) => {
+          return Page;
+        })}
+        {isReachingEnd ? null : (
+          <p tw="mx-auto" css={{ width: 'max-content' }}>
+            <HollowButton loading={isLoadingMore} onClick={loadMore}>
+              Load More
+            </HollowButton>
+          </p>
+        )}
+      </RepoList>
+    </Fragment>
   );
 };
 

@@ -49,7 +49,7 @@ module.exports = {
     'react/no-did-mount-set-state': 'warn',
     'react/no-did-update-set-state': 'warn',
     'react/no-unknown-property': 'warn',
-    'react/react-in-jsx-scope': 'error',
+    'react/react-in-jsx-scope': 'off',
     'react/self-closing-comp': 'warn',
     'react/sort-prop-types': 'off',
     semi: 'error',

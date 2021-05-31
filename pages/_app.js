@@ -1,3 +1,5 @@
+import 'twin.macro';
+import React from 'react';
 import NextApp from 'next/app';
 import 'tailwindcss/dist/base.min.css';
 import { CacheProvider } from '@emotion/core';
@@ -10,7 +12,9 @@ export default class App extends NextApp {
     const { Component, pageProps } = this.props;
     return (
       <CacheProvider value={cache}>
-        <Component {...pageProps} />
+        <div tw="mx-auto px-4 lg:px-0 max-w-screen-lg">
+          <Component {...pageProps} />
+        </div>
       </CacheProvider>
     );
   }
